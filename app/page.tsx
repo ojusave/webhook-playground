@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
-  Alert,
   Button,
   Card,
   CardContent,
@@ -15,6 +14,7 @@ import {
 } from "render-dds";
 import { TTLSelector } from "@/components/TTLSelector";
 import { getBlueprintDeployUrl } from "@/lib/blueprint-deploy";
+import { renderSignupUrlWithUtms } from "@/lib/render-signup-url";
 
 export default function HomePage() {
   const router = useRouter();
@@ -58,80 +58,75 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex flex-1 flex-col items-center justify-center px-4 py-16">
-        <Card variant="elevated" className="w-full max-w-lg shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-center text-2xl">Webhook Playground</CardTitle>
-            <CardDescription className="text-center text-base">
-              Capture, inspect, and debug HTTP requests in real time.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <Alert variant="info">
-              Your data is temporary. Endpoints auto-expire based on your chosen
-              TTL. All payloads are automatically deleted. No accounts, no
-              cookies, no tracking.
-            </Alert>
-
-            <div>
-              <Label className="mb-3 block text-center text-muted-foreground">
-                Endpoint lifetime
-              </Label>
-              <div className="flex justify-center">
-                <TTLSelector value={ttl} onChange={setTtl} />
+        <div className="flex w-full max-w-lg flex-col items-stretch">
+          <Card variant="elevated" className="w-full shadow-xl">
+            <CardHeader>
+              <CardTitle className="text-center text-2xl">
+                Webhook Playground
+              </CardTitle>
+              <CardDescription className="text-center text-base">
+                Capture, inspect, and debug HTTP requests in real time.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <Label className="mb-3 block text-center text-muted-foreground">
+                  Endpoint lifetime
+                </Label>
+                <div className="flex justify-center">
+                  <TTLSelector value={ttl} onChange={setTtl} />
+                </div>
               </div>
-            </div>
 
-            {error ? (
-              <p className="text-center text-sm text-destructive" role="alert">
-                {error}
-              </p>
-            ) : null}
-
-            <Button
-              type="button"
-              className="w-full"
-              onClick={createEndpoint}
-              disabled={busy}
-            >
-              {busy ? "Creating…" : "Create endpoint"}
-            </Button>
-
-            <div className="border-t border-border pt-6">
-              <p className="mb-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Deploy your own
-              </p>
-              <div className="flex flex-col items-center gap-2">
-                <a
-                  href={getBlueprintDeployUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <img
-                    src="https://render.com/images/deploy-to-render-button.svg"
-                    alt="Deploy to Render"
-                    width={175}
-                    height={40}
-                    className="h-10 w-auto"
-                  />
-                </a>
-                <p className="max-w-[280px] text-center text-[11px] leading-snug text-muted-foreground">
-                  Opens Blueprint setup for{" "}
-                  <code className="rounded-none bg-muted px-1 font-mono text-[10px]">
-                    render.yaml
-                  </code>{" "}
-                  (web, Postgres, cron).
+              {error ? (
+                <p className="text-center text-sm text-destructive" role="alert">
+                  {error}
                 </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              ) : null}
+
+              <Button
+                type="button"
+                className="w-full"
+                onClick={createEndpoint}
+                disabled={busy}
+              >
+                {busy ? "Creating…" : "Create endpoint"}
+              </Button>
+            </CardContent>
+          </Card>
+
+          <p
+            className="mt-8 max-w-lg text-center text-sm leading-relaxed text-muted-foreground"
+            role="note"
+          >
+            Your data is temporary. Endpoints auto-expire based on your chosen
+            TTL. All payloads are automatically deleted. No accounts, no
+            cookies, no tracking.
+          </p>
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href={getBlueprintDeployUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <img
+                src="https://render.com/images/deploy-to-render-button.svg"
+                alt="Deploy to Render"
+                width={175}
+                height={40}
+                className="h-10 w-auto"
+              />
+            </a>
+          </div>
+        </div>
       </main>
 
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
         <p>
           Built with Next.js ·{" "}
-          <DdsLink href="https://render.com" variant="default">
+          <DdsLink href={renderSignupUrlWithUtms()} variant="default">
             Render
           </DdsLink>
         </p>

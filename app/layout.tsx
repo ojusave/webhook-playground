@@ -21,11 +21,6 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-/** Always enable dark theme (DDS `.dark` tokens). Do not read OS or localStorage, or light mode wins and strips `dark`. */
-function darkThemeScript(): string {
-  return `!function(){try{document.documentElement.classList.add("dark")}catch(e){}}();`;
-}
-
 export const metadata: Metadata = {
   title: "Webhook Playground",
   description:
@@ -43,11 +38,6 @@ export default function RootLayout({
       className={`dark ${inter.variable} ${roboto.variable} ${jetbrains.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{ __html: darkThemeScript() }}
-        />
-      </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         {children}
       </body>
