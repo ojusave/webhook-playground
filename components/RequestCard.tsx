@@ -51,7 +51,7 @@ export function RequestCard({ req }: { req: StoredRequest }) {
               {relativeTime(req.received_at)}
             </span>
             <span className="text-xs text-muted-foreground">
-              {req.source_ip ?? "—"}
+              {req.source_ip ?? "-"}
             </span>
             <span className="truncate font-mono-data text-xs text-muted-foreground">
               {req.content_type ?? "no content-type"}

@@ -1,6 +1,6 @@
 # Webhook Playground
 
-Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time — inspired by RequestBin. **Designed to run on [Render](https://render.com) only** (Blueprint + Render Postgres).
+Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time, inspired by RequestBin. **Designed to run on [Render](https://render.com) only** (Blueprint + Render Postgres).
 
 ![Screenshot placeholder](https://via.placeholder.com/800x450/13161c/9aa3b2?text=Webhook+Playground)
 
@@ -12,10 +12,10 @@ One click: provisions **web service**, **Render Postgres**, and **cron** from [`
 
 Infrastructure is in **`render.yaml`**:
 
-- **Web service** — `plan: standard`
-- **Cron** — `plan: standard`, hourly cleanup
-- **Render Postgres** — `plan: basic-256mb`; **`DATABASE_URL`** is injected into the web service and cron
-- **Migrations** — `preDeployCommand: node scripts/migrate.js` (runs when `DATABASE_URL` is available)
+- **Web service:** `plan: standard`
+- **Cron:** `plan: standard`, hourly cleanup
+- **Render Postgres:** `plan: basic-256mb`; **`DATABASE_URL`** is injected into the web service and cron
+- **Migrations:** `preDeployCommand: node scripts/migrate.js` (runs when `DATABASE_URL` is available)
 
 Or: [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → connect this repo → **Deploy**.
 
@@ -38,7 +38,7 @@ The platform sets **`RENDER_EXTERNAL_URL`** and related vars automatically ([def
 ## Data handling
 
 - TTL: 1 / 6 / 24 hours; max **100** requests per endpoint; hourly cron deletes expired rows.
-- **No accounts**, **no cookies**, **no tracking** — URL secrecy only.
+- **No accounts**, **no cookies**, **no tracking**; URL secrecy only.
 
 ## License
 

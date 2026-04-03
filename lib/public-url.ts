@@ -1,7 +1,7 @@
 /**
  * Public base URL for webhook links. Intended for Render only.
- * - NEXT_PUBLIC_APP_URL — optional override (e.g. custom domain in the dashboard)
- * - RENDER_EXTERNAL_URL — set automatically on Render web services
+ * - NEXT_PUBLIC_APP_URL: optional override (e.g. custom domain in the dashboard)
+ * - RENDER_EXTERNAL_URL: set automatically on Render web services
  * If neither is set, webhook URLs fall back to a path (`/api/hooks/...`).
  */
 

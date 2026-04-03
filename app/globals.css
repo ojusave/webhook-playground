@@ -57,7 +57,7 @@
   animation: slide-in 0.2s ease-out;
 }
 
-/* Next.js font variables (see app/layout.tsx) — align with DDS typography */
+/* Next.js font variables (see app/layout.tsx): align with DDS typography */
 @layer base {
   body {
     font-family:

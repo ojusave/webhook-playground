@@ -22,7 +22,7 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-/** Inline FOUC script — same logic as `ThemeScript` from render-dds (package is client-only). */
+/** Inline FOUC script: same logic as `ThemeScript` from render-dds (package is client-only). */
 function themeBootstrapScript(storageKey: string): string {
   return `!function(){try{var e=localStorage.getItem(${JSON.stringify(storageKey)}),t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light",a=e||t;"dark"===a?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}catch(e){}}();`;
 }
@@ -30,7 +30,7 @@ function themeBootstrapScript(storageKey: string): string {
 export const metadata: Metadata = {
   title: "Webhook Playground",
   description:
-    "Capture, inspect, and debug HTTP requests in real time — temporary endpoints, no accounts.",
+    "Capture, inspect, and debug HTTP requests in real time. Temporary endpoints, no accounts.",
 };
 
 export default function RootLayout({
