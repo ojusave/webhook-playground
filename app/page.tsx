@@ -1,8 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Label,
+  Link as DdsLink,
+} from "render-dds";
 import { TTLSelector } from "@/components/TTLSelector";
 import { getBlueprintDeployUrl } from "@/lib/blueprint-deploy";
 
@@ -48,83 +58,77 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex flex-1 flex-col items-center justify-center px-4 py-16">
-        <div className="render-panel w-full max-w-lg p-8 shadow-xl">
-          <h1 className="text-center text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
-            Webhook Playground
-          </h1>
-          <p className="mt-2 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-            Capture, inspect, and debug HTTP requests in real time.
-          </p>
-
-          <div className="mt-6 flex flex-col items-center gap-2">
-            <a
-              href={getBlueprintDeployUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-md"
-            >
-              {/* Official Render asset — https://render.com/docs/deploy-to-render */}
-              <img
-                src="https://render.com/images/deploy-to-render-button.svg"
-                alt="Deploy to Render"
-                width={175}
-                height={40}
-                className="h-10 w-auto"
-              />
-            </a>
-            <p className="max-w-[280px] text-center text-[11px] leading-snug text-[var(--text-tertiary)]">
-              Opens Blueprint setup for <code className="rounded bg-[var(--surface-elevated)] px-1 font-mono text-[10px]">render.yaml</code>{" "}
-              (web, Postgres, cron).
-            </p>
-          </div>
-
-          <div
-            className="mt-8 rounded-md border border-[var(--border-default)] bg-[var(--bg-canvas)] p-4 text-sm leading-relaxed text-[var(--text-secondary)]"
-            role="status"
-          >
-            Your data is temporary. Endpoints auto-expire based on your chosen
-            TTL. All payloads are automatically deleted. No accounts, no
-            cookies, no tracking.
-          </div>
-
-          <div className="mt-8">
-            <p className="mb-3 text-center render-label">Endpoint lifetime</p>
-            <div className="flex justify-center">
-              <TTLSelector value={ttl} onChange={setTtl} />
+        <Card variant="elevated" className="w-full max-w-lg shadow-xl">
+          <CardHeader>
+            <CardTitle className="text-center text-2xl">Webhook Playground</CardTitle>
+            <CardDescription className="text-center text-base">
+              Capture, inspect, and debug HTTP requests in real time.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex flex-col items-center gap-2">
+              <a
+                href={getBlueprintDeployUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <img
+                  src="https://render.com/images/deploy-to-render-button.svg"
+                  alt="Deploy to Render"
+                  width={175}
+                  height={40}
+                  className="h-10 w-auto"
+                />
+              </a>
+              <p className="max-w-[280px] text-center text-[11px] leading-snug text-muted-foreground">
+                Opens Blueprint setup for{" "}
+                <code className="rounded-none bg-muted px-1 font-mono text-[10px]">
+                  render.yaml
+                </code>{" "}
+                (web, Postgres, cron).
+              </p>
             </div>
-          </div>
 
-          {error ? (
-            <p
-              className="mt-4 text-center text-sm text-red-400/95"
-              role="alert"
+            <Alert variant="info">
+              Your data is temporary. Endpoints auto-expire based on your chosen
+              TTL. All payloads are automatically deleted. No accounts, no
+              cookies, no tracking.
+            </Alert>
+
+            <div>
+              <Label className="mb-3 block text-center text-muted-foreground">
+                Endpoint lifetime
+              </Label>
+              <div className="flex justify-center">
+                <TTLSelector value={ttl} onChange={setTtl} />
+              </div>
+            </div>
+
+            {error ? (
+              <p className="text-center text-sm text-destructive" role="alert">
+                {error}
+              </p>
+            ) : null}
+
+            <Button
+              type="button"
+              className="w-full"
+              onClick={createEndpoint}
+              disabled={busy}
             >
-              {error}
-            </p>
-          ) : null}
-
-          <button
-            type="button"
-            onClick={createEndpoint}
-            disabled={busy}
-            className="render-btn-primary mt-8 w-full"
-          >
-            {busy ? "Creating…" : "Create endpoint"}
-          </button>
-        </div>
+              {busy ? "Creating…" : "Create endpoint"}
+            </Button>
+          </CardContent>
+        </Card>
       </main>
 
-      <footer className="border-t border-[var(--border-default)] py-6 text-center text-xs text-[var(--text-tertiary)]">
+      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
         <p>
           Built with Next.js ·{" "}
-          <Link
-            href="https://render.com"
-            className="text-[#79c0ff] hover:underline"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <DdsLink href="https://render.com" variant="default">
             Render
-          </Link>
+          </DdsLink>
         </p>
       </footer>
     </div>

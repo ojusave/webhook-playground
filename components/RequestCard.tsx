@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Button, Label } from "render-dds";
 import type { StoredRequest } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
 import { JsonHighlight } from "./JsonHighlight";
@@ -34,63 +35,64 @@ export function RequestCard({ req }: { req: StoredRequest }) {
   const headerEntries = Object.entries(req.headers ?? {});
 
   return (
-    <div className="animate-slide-in rounded-md border border-[var(--border-default)] bg-[var(--surface-default)] shadow-sm">
+    <div className="animate-slide-in rounded-none border border-border bg-card shadow-sm">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-start gap-3 rounded-md px-4 py-3 text-left transition hover:bg-[var(--surface-elevated)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
+        className="flex w-full items-start gap-3 rounded-none px-4 py-3 text-left transition hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <MethodBadge method={req.method} />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span
-              className="font-mono text-xs text-[var(--text-secondary)]"
+              className="font-mono-data text-xs text-muted-foreground"
               title={req.received_at}
             >
               {relativeTime(req.received_at)}
             </span>
-            <span className="text-xs text-[var(--text-tertiary)]">
+            <span className="text-xs text-muted-foreground">
               {req.source_ip ?? "—"}
             </span>
-            <span className="truncate font-mono text-xs text-[var(--text-tertiary)]">
+            <span className="truncate font-mono-data text-xs text-muted-foreground">
               {req.content_type ?? "no content-type"}
             </span>
           </div>
         </div>
-        <span className="shrink-0 text-[var(--text-tertiary)]" aria-hidden>
+        <span className="shrink-0 text-muted-foreground" aria-hidden>
           {open ? "▾" : "▸"}
         </span>
       </button>
       {open && (
-        <div className="space-y-4 border-t border-[var(--border-default)] px-4 py-4">
+        <div className="space-y-4 border-t border-border px-4 py-4">
           {headerEntries.length > 0 && (
             <div>
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                <h4 className="render-label">Headers</h4>
-                <button
+                <Label>Headers</Label>
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setHeadersMinimized((m) => !m)}
-                  className="render-btn-secondary !px-2 !py-1 !text-xs"
                   aria-expanded={!headersMinimized}
                 >
                   {headersMinimized
                     ? `Show headers (${headerEntries.length})`
                     : "Minimize headers"}
-                </button>
+                </Button>
               </div>
               {!headersMinimized ? (
-                <div className="overflow-x-auto rounded-md border border-[var(--border-default)]">
-                  <table className="w-full min-w-[280px] text-left font-mono text-xs">
+                <div className="overflow-x-auto rounded-none border border-border">
+                  <table className="w-full min-w-[280px] text-left font-mono-data text-xs">
                     <tbody>
                       {headerEntries.map(([k, v]) => (
                         <tr
                           key={k}
-                          className="border-b border-[var(--border-default)] last:border-0"
+                          className="border-b border-border last:border-0"
                         >
-                          <td className="whitespace-nowrap px-3 py-2 text-[#79c0ff]">
+                          <td className="whitespace-nowrap px-3 py-2 text-primary">
                             {k}
                           </td>
-                          <td className="break-all px-3 py-2 text-[var(--text-secondary)]">
+                          <td className="break-all px-3 py-2 text-muted-foreground">
                             {v}
                           </td>
                         </tr>
@@ -99,7 +101,7 @@ export function RequestCard({ req }: { req: StoredRequest }) {
                   </table>
                 </div>
               ) : (
-                <p className="text-xs text-[var(--text-tertiary)]">
+                <p className="text-xs text-muted-foreground">
                   {headerEntries.length} header
                   {headerEntries.length === 1 ? "" : "s"} minimized
                 </p>
@@ -108,26 +110,26 @@ export function RequestCard({ req }: { req: StoredRequest }) {
           )}
           <div>
             <div className="mb-2 flex items-center justify-between gap-2">
-              <h4 className="render-label">Body</h4>
+              <Label>Body</Label>
               {req.body ? (
                 <CopyButton
                   text={req.body}
                   label="Copy body"
-                  className="!px-2 !py-1 !text-xs"
+                  className="!h-8 !px-2 !py-1 !text-xs"
                 />
               ) : null}
             </div>
-            <div className="max-h-96 overflow-auto rounded-md border border-[var(--border-default)] bg-[var(--bg-canvas)] p-3">
+            <div className="max-h-96 overflow-auto rounded-none border border-border bg-input-background p-3">
               {req.body ? (
                 isJson ? (
                   <JsonHighlight json={req.body} />
                 ) : (
-                  <pre className="whitespace-pre-wrap break-words font-mono text-xs text-[var(--text-primary)]">
+                  <pre className="whitespace-pre-wrap break-words font-mono-data text-xs text-foreground">
                     {req.body}
                   </pre>
                 )
               ) : (
-                <p className="font-mono text-xs text-[var(--text-tertiary)]">
+                <p className="font-mono-data text-xs text-muted-foreground">
                   (empty)
                 </p>
               )}

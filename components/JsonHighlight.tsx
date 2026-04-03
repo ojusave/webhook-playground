@@ -12,16 +12,16 @@ function highlightTail(s: string) {
   while ((m = re.exec(s)) !== null) {
     if (m.index > last) {
       nodes.push(
-        <span key={`p-${k++}`} className="text-[var(--text-primary)]">
+        <span key={`p-${k++}`} className="text-foreground">
           {s.slice(last, m.index)}
         </span>
       );
     }
     const tok = m[0];
-    let cls = "text-[var(--text-primary)]";
+    let cls = "text-foreground";
     if (tok.startsWith('"')) cls = "text-emerald-400/90";
     else if (tok === "true" || tok === "false") cls = "text-violet-400/90";
-    else if (tok === "null") cls = "text-[var(--text-tertiary)]";
+    else if (tok === "null") cls = "text-muted-foreground";
     else cls = "text-amber-400/90";
     nodes.push(
       <span key={`p-${k++}`} className={cls}>
@@ -32,7 +32,7 @@ function highlightTail(s: string) {
   }
   if (last < s.length) {
     nodes.push(
-      <span key={`p-${k++}`} className="text-[var(--text-primary)]">
+      <span key={`p-${k++}`} className="text-foreground">
         {s.slice(last)}
       </span>
     );
@@ -50,22 +50,22 @@ export function JsonHighlight({ json }: { json: string }) {
 
   const lines = pretty.split("\n");
   return (
-    <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs leading-relaxed">
+    <pre className="font-mono-data overflow-x-auto whitespace-pre-wrap break-words text-xs leading-relaxed">
       {lines.map((line, li) => {
         const km = line.match(/^(\s*)("(?:[^"\\]|\\.)*")\s*(:)(.*)$/);
         if (km) {
           const [, indent, key, colon, tail] = km;
           return (
             <span key={li} className="block">
-              <span className="text-[var(--text-tertiary)]">{indent}</span>
-              <span className="text-[#79c0ff]">{key}</span>
-              <span className="text-[var(--text-secondary)]">{colon}</span>
+              <span className="text-muted-foreground">{indent}</span>
+              <span className="text-primary">{key}</span>
+              <span className="text-muted-foreground">{colon}</span>
               {highlightTail(tail)}
             </span>
           );
         }
         return (
-          <span key={li} className="block text-[var(--text-primary)]">
+          <span key={li} className="block text-foreground">
             {highlightTail(line)}
           </span>
         );

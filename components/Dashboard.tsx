@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Button, Container, Label } from "render-dds";
 import type { StoredRequest } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
 import { CountdownTimer } from "./CountdownTimer";
 import { EmptyState } from "./EmptyState";
 import { ExpiredState } from "./ExpiredState";
 import { RequestCard } from "./RequestCard";
+
+const backLinkClass =
+  "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-none border border-zinc-300 bg-background text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:border-zinc-600";
 
 function BackIcon() {
   return (
@@ -106,53 +110,53 @@ export function Dashboard({
     <div className="relative min-h-screen">
       {expired ? <ExpiredState /> : null}
 
-      <header className="border-b border-[var(--border-default)] bg-[var(--surface-default)]">
+      <header className="border-b border-border bg-card">
         <div className="mx-auto max-w-5xl px-4 py-5">
           <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex min-w-0 items-start gap-3">
               <Link
                 href="/"
-                className="render-btn-secondary mt-0.5 !p-2"
+                className={backLinkClass}
                 aria-label="Back to home"
               >
                 <BackIcon />
               </Link>
               <div className="min-w-0">
-                <p className="render-label">Webhook URL</p>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                <Label>Webhook URL</Label>
+                <p className="mt-1 text-sm text-muted-foreground">
                   Incoming requests appear in the feed below.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="render-panel flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-            <p className="min-w-0 flex-1 break-all font-mono text-sm leading-relaxed text-[#79c0ff]">
+          <Container variant="bordered" padding="sm" className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <p className="font-mono-data min-w-0 flex-1 break-all text-sm leading-relaxed text-primary">
               {webhookUrl}
             </p>
             <CopyButton text={webhookUrl} />
-          </div>
+          </Container>
 
           <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-wrap items-center gap-2">
               <CountdownTimer expiresAtIso={expiresAtIso} onExpire={onExpire} />
-              <span className="render-pill font-mono tabular-nums text-[var(--text-secondary)]">
-                <span className="text-[var(--text-tertiary)]">Requests</span>
-                <span className="text-[var(--text-primary)]">
+              <span className="inline-flex items-center gap-2 rounded-none border border-border bg-muted px-3 py-1 font-mono text-xs tabular-nums text-muted-foreground">
+                <span className="text-muted-foreground">Requests</span>
+                <span className="text-foreground">
                   {count}
-                  <span className="text-[var(--text-tertiary)]"> / </span>
+                  <span className="text-muted-foreground"> / </span>
                   100
                 </span>
               </span>
             </div>
-            <button
+            <Button
               type="button"
               onClick={sendTest}
               disabled={expired || testBusy}
-              className="render-btn-primary w-full sm:w-auto"
+              className="w-full sm:w-auto"
             >
               {testBusy ? "Sending…" : "Send test request"}
-            </button>
+            </Button>
           </div>
         </div>
       </header>
