@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* DDS-inspired tokens (Render design system aesthetic) */
+:root {
+  --bg-base: #0c0e12;
+  --surface: #13161c;
+  --surface-raised: #1a1e27;
+  --surface-overlay: #222831;
+  --border: #2a3039;
+  --border-strong: #3d4450;
+  --content: #e8eaed;
+  --content-secondary: #9aa3b2;
+  --content-tertiary: #6b7280;
+  --accent: #5c6bc0;
+  --accent-hover: #6d7dd2;
+  --accent-muted: rgba(92, 107, 192, 0.15);
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-base)] text-content antialiased;
+  }
+}
