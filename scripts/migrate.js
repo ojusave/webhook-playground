@@ -3,6 +3,7 @@
  * Invoked during Render build after `next build`.
  */
 const { Client } = require("pg");
+const { getPgSsl } = require("../lib/pgSsl.js");
 
 const sql = `
 CREATE TABLE IF NOT EXISTS endpoints (
@@ -35,7 +36,7 @@ async function main() {
     console.error("DATABASE_URL is not set; skipping migrations.");
     process.exit(0);
   }
-  const client = new Client({ connectionString: url });
+  const client = new Client({ connectionString: url, ssl: getPgSsl() });
   await client.connect();
   try {
     await client.query(sql);

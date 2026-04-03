@@ -3,6 +3,7 @@
  * Run hourly via Render Cron.
  */
 const { Client } = require("pg");
+const { getPgSsl } = require("../lib/pgSsl.js");
 
 async function main() {
   const url = process.env.DATABASE_URL;
@@ -10,7 +11,7 @@ async function main() {
     console.error("DATABASE_URL is not set");
     process.exit(1);
   }
-  const client = new Client({ connectionString: url });
+  const client = new Client({ connectionString: url, ssl: getPgSsl() });
   await client.connect();
   try {
     const { rowCount } = await client.query(

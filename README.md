@@ -38,6 +38,10 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Optional: **`NEXT_PUBLIC_APP_URL`** if the inferred URL is wrong; otherwise the app uses request headers (e.g. `http://localhost:3000`).
 
+### Database connection issues on Render
+
+Render Postgres expects **TLS**. The app sets `pg` SSL options automatically when `RENDER=true` (see [connecting to Render Postgres](https://render.com/docs/postgresql-creating-connecting)). If you still see connection errors, add **`DATABASE_SSL_NO_VERIFY=1`** to the web service (and cron) environment in the Render dashboard.
+
 ## Tech stack
 
 - **Next.js 14** (App Router) + **TypeScript**
