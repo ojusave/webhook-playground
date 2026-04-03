@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       {
         error: "database_not_configured",
         message:
-          "DATABASE_URL is not set. On Render, deploy with the Blueprint (render.yaml) so Render Postgres is linked. For local dev, set DATABASE_URL in .env.local (see env.example), run node scripts/migrate.js, then restart the dev server.",
+          "DATABASE_URL is not set. Link Render Postgres to this web service (Blueprint render.yaml).",
       },
       { status: 503 }
     );
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         {
           error: "schema_missing",
           message:
-            "Database tables are missing. On Render, check deploy logs for preDeploy (migrations). Run: node scripts/migrate.js with DATABASE_URL set.",
+            "Database tables are missing. Check the deploy log: preDeployCommand must complete (Migrations applied.).",
         },
         { status: 503 }
       );
@@ -57,13 +57,13 @@ export async function POST(req: Request) {
       {
         error: "database_error",
         message:
-          "Could not use the database. On Render: confirm Postgres is linked (DATABASE_URL) and the latest deploy ran migrations (preDeploy). Locally: set DATABASE_URL, run node scripts/migrate.js.",
+          "Could not use the database. Confirm Postgres is linked and the latest deploy’s preDeploy step succeeded.",
       },
       { status: 503 }
     );
   }
 
-  const url = webhookUrlForEndpoint(id, req.headers);
+  const url = webhookUrlForEndpoint(id);
 
   return NextResponse.json({ id, url });
 }
