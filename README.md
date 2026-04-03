@@ -20,9 +20,9 @@ Steps:
 3. Connect the repository. Render reads `render.yaml` at the repo root.
 4. Click **Deploy Blueprint**.
 
-Webhook URLs use the **incoming request host** (`Host`, `X-Forwarded-Host`, `X-Forwarded-Proto`), so you get correct `https://…onrender.com` links without setting a public URL env var.
+On Render, **`RENDER_EXTERNAL_URL`** is set automatically for the web service ([default env vars](https://render.com/docs/environment-variables)); the app uses that for webhook URLs when present. Otherwise it falls back to request headers (e.g. local `npm run dev`).
 
-Optional: set **`NEXT_PUBLIC_APP_URL`** only if you need to override (for example a custom domain).
+Optional: set **`NEXT_PUBLIC_APP_URL`** if you need to override (for example a custom domain you attach in the dashboard).
 
 ## Local development
 
@@ -36,7 +36,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Optional: **`NEXT_PUBLIC_APP_URL`** if the inferred URL is wrong; otherwise the app uses request headers (e.g. `http://localhost:3000`).
+Optional: **`NEXT_PUBLIC_APP_URL`** if you need a fixed base URL locally; otherwise **`RENDER_EXTERNAL_URL`** on Render, or request headers in dev.
 
 ### Database connection issues on Render
 

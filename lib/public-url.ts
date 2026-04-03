@@ -1,8 +1,9 @@
 /**
  * Public URL for links and webhooks. Order:
- * 1. NEXT_PUBLIC_APP_URL — optional override (custom domain, bad proxy headers)
- * 2. Request headers — Host + X-Forwarded-* (works on Render after deploy without env)
- * 3. Empty → callers fall back to a path-only URL
+ * 1. NEXT_PUBLIC_APP_URL — optional override (custom domain you set in dashboard)
+ * 2. RENDER_EXTERNAL_URL — set automatically on Render web services (no Blueprint entry)
+ * 3. Request headers — Host + X-Forwarded-* (local dev, or non-Render hosts)
+ * 4. Empty → callers fall back to a path-only URL
  */
 
 type HeaderBag = { get(name: string): string | null };
@@ -10,6 +11,10 @@ type HeaderBag = { get(name: string): string | null };
 export function resolvePublicOrigin(h?: HeaderBag): string {
   const explicit = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "").trim();
   if (explicit) return explicit;
+
+  // https://render.com/docs/environment-variables — full https URL for this service
+  const renderExternal = process.env.RENDER_EXTERNAL_URL?.replace(/\/$/, "").trim();
+  if (renderExternal) return renderExternal;
 
   if (!h) return "";
 
@@ -25,8 +30,7 @@ export function resolvePublicOrigin(h?: HeaderBag): string {
     hostRaw.startsWith("127.0.0.1:") ||
     hostRaw === "localhost" ||
     hostRaw.startsWith("[::1]");
-  const proto =
-    forwardedProto || (isLocal ? "http" : "https");
+  const proto = forwardedProto || (isLocal ? "http" : "https");
 
   return `${proto}://${hostRaw}`;
 }
