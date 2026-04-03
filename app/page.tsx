@@ -20,11 +20,25 @@ export default function HomePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ttlHours: ttl }),
       });
-      if (!res.ok) throw new Error("Failed to create");
-      const data = (await res.json()) as { id: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        id?: string;
+        message?: string;
+      };
+      if (!res.ok) {
+        setError(
+          typeof data.message === "string"
+            ? data.message
+            : "Could not create endpoint."
+        );
+        return;
+      }
+      if (!data.id) {
+        setError("Invalid response from server.");
+        return;
+      }
       router.push(`/hooks/${data.id}`);
     } catch {
-      setError("Could not create endpoint. Check DATABASE_URL and try again.");
+      setError("Could not reach the server. Check your connection and try again.");
     } finally {
       setBusy(false);
     }

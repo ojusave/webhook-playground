@@ -23,22 +23,24 @@ No manual database setup is required: migrations run as part of the web service 
 npm install
 ```
 
-Create a PostgreSQL database locally and set:
+**Database (pick one):**
 
-```bash
-export DATABASE_URL="postgres://user:pass@localhost:5432/webhook_playground"
-```
+1. **Docker (simplest)** — Postgres on port 5432:
 
-Optional: **`NEXT_PUBLIC_APP_URL`** if you must force a specific base URL; otherwise the app infers `http://localhost:3000` from request headers during `npm run dev`.
+   ```bash
+   docker compose up -d
+   cp env.example .env.local
+   node scripts/migrate.js
+   npm run dev
+   ```
 
-Run migrations, then the dev server:
+2. **Your own Postgres** — set `DATABASE_URL` in `.env.local` or the environment (see `env.example`), then run `node scripts/migrate.js` and `npm run dev`.
 
-```bash
-node scripts/migrate.js
-npm run dev
-```
+Optional: **`NEXT_PUBLIC_APP_URL`** if you must force a specific base URL; otherwise the app infers the URL from request headers (e.g. `http://localhost:3000` in dev).
 
 Open [http://localhost:3000](http://localhost:3000).
+
+**Deploy note:** On Render, `DATABASE_URL` is injected from the Blueprint database. The “Could not create endpoint” message usually means the app is running **without** `DATABASE_URL` (typical for local `npm run dev` until you add `.env.local`).
 
 ## Tech stack
 
