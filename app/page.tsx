@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TTLSelector } from "@/components/TTLSelector";
+import { getBlueprintDeployUrl } from "@/lib/blueprint-deploy";
 
 export default function HomePage() {
   const router = useRouter();
@@ -54,6 +55,28 @@ export default function HomePage() {
           <p className="mt-2 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
             Capture, inspect, and debug HTTP requests in real time.
           </p>
+
+          <div className="mt-6 flex flex-col items-center gap-2">
+            <a
+              href={getBlueprintDeployUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] rounded-md"
+            >
+              {/* Official Render asset — https://render.com/docs/deploy-to-render */}
+              <img
+                src="https://render.com/images/deploy-to-render-button.svg"
+                alt="Deploy to Render"
+                width={175}
+                height={40}
+                className="h-10 w-auto"
+              />
+            </a>
+            <p className="max-w-[280px] text-center text-[11px] leading-snug text-[var(--text-tertiary)]">
+              Opens Blueprint setup for <code className="rounded bg-[var(--surface-elevated)] px-1 font-mono text-[10px]">render.yaml</code>{" "}
+              (web, Postgres, cron).
+            </p>
+          </div>
 
           <div
             className="mt-8 rounded-md border border-[var(--border-default)] bg-[var(--bg-canvas)] p-4 text-sm leading-relaxed text-[var(--text-secondary)]"
