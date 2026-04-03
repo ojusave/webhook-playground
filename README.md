@@ -1,6 +1,6 @@
 # Webhook Playground
 
-Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time, inspired by RequestBin. **Designed to run on [Render](https://render.com) only** (Blueprint + Render Postgres).
+Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time.
 
 ![Screenshot placeholder](https://via.placeholder.com/800x450/13161c/9aa3b2?text=Webhook+Playground)
 
