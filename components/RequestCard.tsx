@@ -18,6 +18,7 @@ function relativeTime(iso: string): string {
 
 export function RequestCard({ req }: { req: StoredRequest }) {
   const [open, setOpen] = useState(false);
+  const [headersMinimized, setHeadersMinimized] = useState(false);
   const isJson = useMemo(() => {
     const ct = req.content_type?.toLowerCase() ?? "";
     if (ct.includes("application/json")) return true;
@@ -64,26 +65,45 @@ export function RequestCard({ req }: { req: StoredRequest }) {
         <div className="space-y-4 border-t border-[var(--border-default)] px-4 py-4">
           {headerEntries.length > 0 && (
             <div>
-              <h4 className="mb-2 render-label">Headers</h4>
-              <div className="overflow-x-auto rounded-md border border-[var(--border-default)]">
-                <table className="w-full min-w-[280px] text-left font-mono text-xs">
-                  <tbody>
-                    {headerEntries.map(([k, v]) => (
-                      <tr
-                        key={k}
-                        className="border-b border-[var(--border-default)] last:border-0"
-                      >
-                        <td className="whitespace-nowrap px-3 py-2 text-[#79c0ff]">
-                          {k}
-                        </td>
-                        <td className="break-all px-3 py-2 text-[var(--text-secondary)]">
-                          {v}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                <h4 className="render-label">Headers</h4>
+                <button
+                  type="button"
+                  onClick={() => setHeadersMinimized((m) => !m)}
+                  className="render-btn-secondary !px-2 !py-1 !text-xs"
+                  aria-expanded={!headersMinimized}
+                >
+                  {headersMinimized
+                    ? `Show headers (${headerEntries.length})`
+                    : "Minimize headers"}
+                </button>
               </div>
+              {!headersMinimized ? (
+                <div className="overflow-x-auto rounded-md border border-[var(--border-default)]">
+                  <table className="w-full min-w-[280px] text-left font-mono text-xs">
+                    <tbody>
+                      {headerEntries.map(([k, v]) => (
+                        <tr
+                          key={k}
+                          className="border-b border-[var(--border-default)] last:border-0"
+                        >
+                          <td className="whitespace-nowrap px-3 py-2 text-[#79c0ff]">
+                            {k}
+                          </td>
+                          <td className="break-all px-3 py-2 text-[var(--text-secondary)]">
+                            {v}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="text-xs text-[var(--text-tertiary)]">
+                  {headerEntries.length} header
+                  {headerEntries.length === 1 ? "" : "s"} minimized
+                </p>
+              )}
             </div>
           )}
           <div>
