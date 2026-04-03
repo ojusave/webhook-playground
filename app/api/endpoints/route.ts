@@ -37,11 +37,25 @@ export async function POST(req: Request) {
     );
   } catch (e) {
     console.error("POST /api/endpoints", e);
+    const code =
+      typeof e === "object" && e !== null && "code" in e
+        ? String((e as { code?: string }).code)
+        : "";
+    if (code === "42P01") {
+      return NextResponse.json(
+        {
+          error: "schema_missing",
+          message:
+            "Database tables are missing. On Render, check deploy logs for preDeploy (migrations). Run: node scripts/migrate.js with DATABASE_URL set.",
+        },
+        { status: 503 }
+      );
+    }
     return NextResponse.json(
       {
         error: "database_error",
         message:
-          "Could not connect to the database. On Render, confirm the web service has DATABASE_URL from the linked Postgres. Locally, check DATABASE_URL, that Postgres is reachable, and that migrations ran (node scripts/migrate.js).",
+          "Could not use the database. On Render: confirm Postgres is linked (DATABASE_URL) and the latest deploy ran migrations (preDeploy). Locally: set DATABASE_URL, run node scripts/migrate.js.",
       },
       { status: 503 }
     );

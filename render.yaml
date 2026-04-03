@@ -4,7 +4,9 @@ services:
     name: webhook-playground
     runtime: node
     plan: standard
-    buildCommand: npm ci && npm run build && node scripts/migrate.js
+    # Migrations need DATABASE_URL; it is always available here (not always during build).
+    buildCommand: npm ci && npm run build
+    preDeployCommand: node scripts/migrate.js
     startCommand: npm start
     envVars:
       - key: DATABASE_URL

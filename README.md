@@ -11,7 +11,7 @@ Infrastructure is defined in **`render.yaml`** (Blueprint):
 - **Web service** — `plan: standard` (paid instance; see [Render pricing](https://render.com/pricing)).
 - **Cron** — `plan: standard` (paid).
 - **Render Postgres** — `plan: basic-256mb` (flexible paid tier, not `free`). Database name `webhook_playground`; **`DATABASE_URL`** is injected automatically into the web service and the cron job.
-- **Migrations** — `scripts/migrate.js` runs in the web service `buildCommand`.
+- **Migrations** — `preDeployCommand: node scripts/migrate.js` so schema is applied **after** build when `DATABASE_URL` is always available (build-only runs `npm ci && npm run build`).
 
 Steps:
 
@@ -40,7 +40,9 @@ Optional: **`NEXT_PUBLIC_APP_URL`** if the inferred URL is wrong; otherwise the 
 
 ### Database connection issues on Render
 
-Render Postgres expects **TLS**. The app sets `pg` SSL options automatically when `RENDER=true` (see [connecting to Render Postgres](https://render.com/docs/postgresql-creating-connecting)). If you still see connection errors, add **`DATABASE_SSL_NO_VERIFY=1`** to the web service (and cron) environment in the Render dashboard.
+Render Postgres expects **TLS**. The app enables TLS for any database host that is not `localhost` / `127.0.0.1` (see [connecting to Render Postgres](https://render.com/docs/postgresql-creating-connecting)). For a **non-TLS Postgres on a remote hostname** (unusual), set **`DATABASE_SSL_DISABLE=1`**.
+
+If endpoints fail with “tables are missing”, open the **deploy log** and confirm **`preDeployCommand`** finished (`Migrations applied.`).
 
 ## Tech stack
 
