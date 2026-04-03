@@ -2,7 +2,21 @@
 
 Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time.
 
-![Screenshot placeholder](https://via.placeholder.com/800x450/13161c/9aa3b2?text=Webhook+Playground)
+## Screenshots
+
+Source files: [`components/img/landing.png`](./components/img/landing.png), [`components/img/dashboard.png`](./components/img/dashboard.png).
+
+### Landing page
+
+Pick endpoint lifetime, then **Create endpoint** to get a temporary webhook URL.
+
+![Landing page: title, TTL selector, Create endpoint, privacy note, Deploy to Render](./components/img/landing.png)
+
+### Hook dashboard
+
+Copy the public hook URL, use **Send test request**, and expand a row to inspect headers and JSON body.
+
+![Dashboard: webhook URL, expiry timer, request count, POST request with JSON body](./components/img/dashboard.png)
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ojusave/webhook-playground)
 
