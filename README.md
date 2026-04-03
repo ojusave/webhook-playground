@@ -6,41 +6,36 @@ Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time
 
 ## Deploy to Render
 
+Infrastructure is defined in **`render.yaml`** (Blueprint):
+
+- **Web service** — builds the app, runs `scripts/migrate.js`, starts Next.js.
+- **Render Postgres** — database `webhook_playground`; **`DATABASE_URL`** is injected automatically into the web service and the cleanup cron job (no manual secret for the connection string).
+- **Cron** — hourly `scripts/cleanup.js` using the same database.
+
+Steps:
+
 1. Fork or clone this repository and push it to GitHub.
 2. In the [Render Dashboard](https://dashboard.render.com), click **New** → **Blueprint**.
-3. Connect the repository. Render detects `render.yaml` at the repo root.
-4. Click **Deploy Blueprint**. Render provisions the web service, PostgreSQL database, and hourly cleanup cron job.
+3. Connect the repository. Render reads `render.yaml` at the repo root.
+4. Click **Deploy Blueprint**.
 
-Webhook URLs use the **incoming request host** (`Host`, `X-Forwarded-Host`, `X-Forwarded-Proto`), so you get correct `https://…onrender.com` links **without** setting any public URL env var after deploy.
+Webhook URLs use the **incoming request host** (`Host`, `X-Forwarded-Host`, `X-Forwarded-Proto`), so you get correct `https://…onrender.com` links without setting a public URL env var.
 
-Optional: set **`NEXT_PUBLIC_APP_URL`** only if you need to override (for example a custom domain that should appear instead of the default Render hostname).
-
-No manual database setup is required: migrations run as part of the web service build.
+Optional: set **`NEXT_PUBLIC_APP_URL`** only if you need to override (for example a custom domain).
 
 ## Local development
 
+Running `npm run dev` on your laptop does **not** use `render.yaml`; you need a Postgres instance and **`DATABASE_URL`** yourself (for example a local Postgres install or an external URL). Copy `env.example` to `.env.local` and set `DATABASE_URL`, then:
+
 ```bash
 npm install
+node scripts/migrate.js
+npm run dev
 ```
-
-**Database (pick one):**
-
-1. **Docker (simplest)** — Postgres on port 5432:
-
-   ```bash
-   docker compose up -d
-   cp env.example .env.local
-   node scripts/migrate.js
-   npm run dev
-   ```
-
-2. **Your own Postgres** — set `DATABASE_URL` in `.env.local` or the environment (see `env.example`), then run `node scripts/migrate.js` and `npm run dev`.
-
-Optional: **`NEXT_PUBLIC_APP_URL`** if you must force a specific base URL; otherwise the app infers the URL from request headers (e.g. `http://localhost:3000` in dev).
 
 Open [http://localhost:3000](http://localhost:3000).
 
-**Deploy note:** On Render, `DATABASE_URL` is injected from the Blueprint database. The “Could not create endpoint” message usually means the app is running **without** `DATABASE_URL` (typical for local `npm run dev` until you add `.env.local`).
+Optional: **`NEXT_PUBLIC_APP_URL`** if the inferred URL is wrong; otherwise the app uses request headers (e.g. `http://localhost:3000`).
 
 ## Tech stack
 

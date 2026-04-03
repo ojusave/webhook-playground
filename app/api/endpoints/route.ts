@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       {
         error: "database_not_configured",
         message:
-          "DATABASE_URL is not set. For local dev: run `docker compose up -d`, copy `env.example` to `.env.local`, run `node scripts/migrate.js`, then restart `npm run dev`.",
+          "DATABASE_URL is not set. On Render, deploy with the Blueprint (render.yaml) so Render Postgres is linked. For local dev, set DATABASE_URL in .env.local (see env.example), run node scripts/migrate.js, then restart the dev server.",
       },
       { status: 503 }
     );
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       {
         error: "database_error",
         message:
-          "Could not connect to the database. Check DATABASE_URL, ensure Postgres is running, and run `node scripts/migrate.js`.",
+          "Could not connect to the database. On Render, confirm the web service has DATABASE_URL from the linked Postgres. Locally, check DATABASE_URL, that Postgres is reachable, and that migrations ran (node scripts/migrate.js).",
       },
       { status: 503 }
     );
