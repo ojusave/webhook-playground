@@ -30,10 +30,12 @@ export async function POST(req: Request) {
 
   const id = createEndpointId();
   try {
+    // $2 and $3 must be separate bindings: Postgres errors if $2 is used for
+    // both an integer column and in "NOW() + $2 * interval" ("inconsistent types for parameter $2").
     await pool.query(
       `INSERT INTO endpoints (id, ttl_hours, expires_at)
-       VALUES ($1, $2, NOW() + $2 * INTERVAL '1 hour')`,
-      [id, ttlHours]
+       VALUES ($1, $2, NOW() + $3 * INTERVAL '1 hour')`,
+      [id, ttlHours, ttlHours]
     );
   } catch (e) {
     console.error("POST /api/endpoints", e);
