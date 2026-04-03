@@ -9,8 +9,11 @@ Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time
 1. Fork or clone this repository and push it to GitHub.
 2. In the [Render Dashboard](https://dashboard.render.com), click **New** → **Blueprint**.
 3. Connect the repository. Render detects `render.yaml` at the repo root.
-4. Set the environment variable **`NEXT_PUBLIC_APP_URL`** to your web service URL (for example `https://webhook-playground.onrender.com`). This is used to show the full webhook URL on the dashboard and in API responses.
-5. Click **Deploy Blueprint**. Render provisions the web service, PostgreSQL database, and hourly cleanup cron job.
+4. Click **Deploy Blueprint**. Render provisions the web service, PostgreSQL database, and hourly cleanup cron job.
+
+Webhook URLs use the **incoming request host** (`Host`, `X-Forwarded-Host`, `X-Forwarded-Proto`), so you get correct `https://…onrender.com` links **without** setting any public URL env var after deploy.
+
+Optional: set **`NEXT_PUBLIC_APP_URL`** only if you need to override (for example a custom domain that should appear instead of the default Render hostname).
 
 No manual database setup is required: migrations run as part of the web service build.
 
@@ -26,11 +29,7 @@ Create a PostgreSQL database locally and set:
 export DATABASE_URL="postgres://user:pass@localhost:5432/webhook_playground"
 ```
 
-Optional (recommended so the UI shows absolute webhook URLs):
-
-```bash
-export NEXT_PUBLIC_APP_URL="http://localhost:3000"
-```
+Optional: **`NEXT_PUBLIC_APP_URL`** if you must force a specific base URL; otherwise the app infers `http://localhost:3000` from request headers during `npm run dev`.
 
 Run migrations, then the dev server:
 

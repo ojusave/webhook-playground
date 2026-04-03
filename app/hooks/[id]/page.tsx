@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { ExpiredState } from "@/components/ExpiredState";
 import { Dashboard } from "@/components/Dashboard";
 import { getEndpoint } from "@/lib/endpoint-queries";
@@ -16,7 +17,8 @@ export default async function HookPage({
     return <ExpiredState />;
   }
 
-  const webhookUrl = webhookUrlForEndpoint(ep.id);
+  const h = await headers();
+  const webhookUrl = webhookUrlForEndpoint(ep.id, h);
 
   return (
     <Dashboard

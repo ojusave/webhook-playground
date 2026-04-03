@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { createEndpointId } from "@/lib/nanoid";
+import { webhookUrlForEndpoint } from "@/lib/public-url";
 
 export const dynamic = "force-dynamic";
 
@@ -23,9 +24,7 @@ export async function POST(req: Request) {
     [id, ttlHours]
   );
 
-  const base =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "";
-  const url = `${base}/api/hooks/${id}`;
+  const url = webhookUrlForEndpoint(id, req.headers);
 
   return NextResponse.json({ id, url });
 }
