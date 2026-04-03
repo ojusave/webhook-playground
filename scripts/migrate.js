@@ -1,8 +1,8 @@
 /**
- * Runs schema migrations against DATABASE_URL.
- * Invoked during Render build after `next build`.
+ * Runs schema migrations. Invoked from Render preDeployCommand (see render.yaml).
  */
 const { Client } = require("pg");
+const { getPgSsl } = require("../lib/pgSsl.js");
 
 const sql = `
 CREATE TABLE IF NOT EXISTS endpoints (
@@ -30,12 +30,14 @@ CREATE INDEX IF NOT EXISTS idx_endpoints_expires_at ON endpoints(expires_at);
 `;
 
 async function main() {
-  const url = process.env.DATABASE_URL;
+  const url = process.env.DATABASE_URL?.trim();
   if (!url) {
-    console.error("DATABASE_URL is not set; skipping migrations.");
-    process.exit(0);
+    console.error(
+      "DATABASE_URL is not set. Link Render Postgres to this service in the Blueprint."
+    );
+    process.exit(1);
   }
-  const client = new Client({ connectionString: url });
+  const client = new Client({ connectionString: url, ssl: getPgSsl() });
   await client.connect();
   try {
     await client.query(sql);

@@ -1,5 +1,7 @@
 "use client";
 
+import { ButtonGroup } from "render-dds";
+
 const OPTIONS = [
   { hours: 1, label: "1 hour" },
   { hours: 6, label: "6 hours" },
@@ -14,10 +16,10 @@ export function TTLSelector({
   onChange: (hours: number) => void;
 }) {
   return (
-    <div
-      className="inline-flex rounded-lg border border-border bg-surface p-1"
+    <ButtonGroup
       role="group"
       aria-label="Endpoint lifetime"
+      className="rounded-none border border-border bg-card p-0.5"
     >
       {OPTIONS.map((opt) => {
         const active = value === opt.hours;
@@ -26,16 +28,16 @@ export function TTLSelector({
             key={opt.hours}
             type="button"
             onClick={() => onChange(opt.hours)}
-            className={`rounded-md px-4 py-2 text-sm font-medium transition focus:outline-none focus-visible:shadow-focus ${
+            className={`rounded-none px-4 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               active
-                ? "bg-accent text-white shadow-sm"
-                : "text-content-secondary hover:bg-surface-overlay hover:text-content"
+                ? "bg-primary font-semibold text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
             }`}
           >
             {opt.label}
           </button>
         );
       })}
-    </div>
+    </ButtonGroup>
   );
 }

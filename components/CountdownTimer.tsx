@@ -45,8 +45,9 @@ export function CountdownTimer({
   }, [expiresAtIso]);
 
   return (
-    <span className="font-mono text-sm tabular-nums text-content-secondary">
-      Expires in {label}
+    <span className="inline-flex items-center gap-2 rounded-none border border-border bg-muted px-3 py-1 font-mono text-xs tabular-nums text-muted-foreground">
+      <span className="text-muted-foreground">Expires in</span>
+      <span className="text-foreground">{label}</span>
     </span>
   );
 }

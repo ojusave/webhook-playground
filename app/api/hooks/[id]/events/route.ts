@@ -1,5 +1,6 @@
 import { Client } from "pg";
 import { pool } from "@/lib/db";
+import { getPgSsl } from "@/lib/pgSsl.js";
 import { rowToRequest } from "@/lib/request-row";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,10 @@ export async function GET(
   }
 
   const encoder = new TextEncoder();
-  const listenClient = new Client({ connectionString: url });
+  const listenClient = new Client({
+    connectionString: url,
+    ssl: getPgSsl(),
+  });
 
   const timers = {
     heartbeat: null as ReturnType<typeof setInterval> | null,

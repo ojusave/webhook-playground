@@ -1,22 +1,23 @@
+# Paid tiers only (no free DB). Plans match https://render.com/docs/yaml-spec
 services:
   - type: web
     name: webhook-playground
     runtime: node
-    plan: starter
-    buildCommand: npm ci && npm run build && node scripts/migrate.js
+    plan: standard
+    # Migrations need DATABASE_URL; it is always available here (not always during build).
+    buildCommand: npm ci && npm run build
+    preDeployCommand: node scripts/migrate.js
     startCommand: npm start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: webhook-playground-db
           property: connectionString
-      - key: NEXT_PUBLIC_APP_URL
-        sync: false
 
   - type: cron
     name: webhook-playground-cleanup
     runtime: node
-    plan: starter
+    plan: standard
     schedule: "0 * * * *"
     buildCommand: npm ci
     startCommand: node scripts/cleanup.js
@@ -29,4 +30,5 @@ services:
 databases:
   - name: webhook-playground-db
     databaseName: webhook_playground
-    plan: free
+    # Flexible instance type (paid). Alternatives: basic-1gb, basic-4gb, pro-*, accelerated-*
+    plan: basic-256mb

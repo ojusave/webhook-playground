@@ -1,61 +1,58 @@
 # Webhook Playground
 
-Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time — inspired by RequestBin, built for Render.
+Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time.
 
-![Screenshot placeholder](https://via.placeholder.com/800x450/13161c/9aa3b2?text=Webhook+Playground)
+## Screenshots
 
-## Deploy to Render
+Source files: [`components/img/landing.png`](./components/img/landing.png), [`components/img/dashboard.png`](./components/img/dashboard.png).
 
-1. Fork or clone this repository and push it to GitHub.
-2. In the [Render Dashboard](https://dashboard.render.com), click **New** → **Blueprint**.
-3. Connect the repository. Render detects `render.yaml` at the repo root.
-4. Set the environment variable **`NEXT_PUBLIC_APP_URL`** to your web service URL (for example `https://webhook-playground.onrender.com`). This is used to show the full webhook URL on the dashboard and in API responses.
-5. Click **Deploy Blueprint**. Render provisions the web service, PostgreSQL database, and hourly cleanup cron job.
+### Landing page
 
-No manual database setup is required: migrations run as part of the web service build.
+Pick endpoint lifetime, then **Create endpoint** to get a temporary webhook URL.
 
-## Local development
+![Landing page: title, TTL selector, Create endpoint, privacy note, Deploy to Render](./components/img/landing.png)
 
-```bash
-npm install
-```
+### Hook dashboard
 
-Create a PostgreSQL database locally and set:
+Copy the public hook URL, use **Send test request**, and expand a row to inspect headers and JSON body.
 
-```bash
-export DATABASE_URL="postgres://user:pass@localhost:5432/webhook_playground"
-```
+![Dashboard: webhook URL, expiry timer, request count, POST request with JSON body](./components/img/dashboard.png)
 
-Optional (recommended so the UI shows absolute webhook URLs):
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ojusave/webhook-playground)
 
-```bash
-export NEXT_PUBLIC_APP_URL="http://localhost:3000"
-```
+One click: provisions **web service**, **Render Postgres**, and **cron** from [`render.yaml`](./render.yaml). Forks: change the `repo=` URL or set `NEXT_PUBLIC_BLUEPRINT_REPO_URL` when building so the landing-page button matches your GitHub repo.
 
-Run migrations, then the dev server:
+## Deploy (manual)
 
-```bash
-node scripts/migrate.js
-npm run dev
-```
+Infrastructure is in **`render.yaml`**:
 
-Open [http://localhost:3000](http://localhost:3000).
+- **Web service:** `plan: standard`
+- **Cron:** `plan: standard`, hourly cleanup
+- **Render Postgres:** `plan: basic-256mb`; **`DATABASE_URL`** is injected into the web service and cron
+- **Migrations:** `preDeployCommand: node scripts/migrate.js` (runs when `DATABASE_URL` is available)
+
+Or: [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → connect this repo → **Deploy**.
+
+The platform sets **`RENDER_EXTERNAL_URL`** and related vars automatically ([default environment variables](https://render.com/docs/environment-variables)); the app uses that for full webhook URLs. Optional: **`NEXT_PUBLIC_APP_URL`** in the dashboard if you use a **custom domain** and want that host in links.
+
+### Troubleshooting
+
+- **TLS:** Postgres connections use TLS with settings appropriate for Render Postgres (`lib/pgSsl.js`).
+- **Missing tables:** Open the deploy log and confirm **preDeploy** printed `Migrations applied.`
+- **Wrong URL in UI:** Ensure you’re on the live service URL; set `NEXT_PUBLIC_APP_URL` if you use a custom domain.
 
 ## Tech stack
 
 - **Next.js 14** (App Router) + **TypeScript**
-- **Tailwind CSS** for styling (UI aligned with Render’s DDS-style patterns: surfaces, borders, accent, focus rings)
-- **PostgreSQL** via the **`pg`** driver (raw SQL, no ORM)
-- **Server-Sent Events (SSE)** for live request updates
-- **`nanoid`** for short endpoint IDs
-- **JetBrains Mono** (data) + **Inter** (UI) via `next/font`
+- **Tailwind CSS**
+- **PostgreSQL** via **`pg`** (raw SQL)
+- **SSE** for live updates
+- **`nanoid`** for endpoint IDs
 
 ## Data handling
 
-- Endpoints expire after the TTL you choose (1, 6, or 24 hours).
-- Stored requests are capped at **100 per endpoint** (oldest dropped when full).
-- A **cron job** deletes expired endpoints and their requests hourly (`scripts/cleanup.js`).
-- **No accounts**, **no cookies**, **no tracking** — the random ID in the URL is the only access control.
+- TTL: 1 / 6 / 24 hours; max **100** requests per endpoint; hourly cron deletes expired rows.
+- **No accounts**, **no cookies**, **no tracking**; URL secrecy only.
 
 ## License
 

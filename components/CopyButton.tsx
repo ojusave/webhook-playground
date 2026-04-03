@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "render-dds";
 
 export function CopyButton({
   text,
@@ -24,12 +25,13 @@ export function CopyButton({
   }
 
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
       onClick={copy}
-      className={`inline-flex items-center justify-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-content transition hover:border-border-strong hover:bg-surface-overlay focus:outline-none focus-visible:shadow-focus ${className}`}
+      className={`shrink-0 ${className}`}
     >
       {done ? "Copied" : label}
-    </button>
+    </Button>
   );
 }
