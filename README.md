@@ -8,11 +8,6 @@
   </a>
 </p>
 
-| | |
-|:---|:---|
-| **Stack** | Next.js 14 · TypeScript · PostgreSQL · [Render](https://render.com) |
-| **License** | MIT |
-
 ---
 
 ## What you get
@@ -105,4 +100,10 @@ The [Blueprint](https://render.com/docs/blueprint-spec) in [`render.yaml`](./ren
 
 ## License
 
-MIT
+This project is released under the [MIT License](LICENSE).
+
+You may use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, and you may let others do the same, as long as you include the original copyright notice and permission notice in any substantial copy of the work.
+
+The software is provided **as is**, without warranty of any kind. The authors and copyright holders are not liable for any claim, damages, or other liability arising from use of the software.
+
+For the full legal text, see [`LICENSE`](LICENSE) in this repository.
