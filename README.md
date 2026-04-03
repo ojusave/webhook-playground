@@ -2,9 +2,6 @@
 
 Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time.
 
-## Screenshots
-
-Source files: [`components/img/landing.png`](./components/img/landing.png), [`components/img/dashboard.png`](./components/img/dashboard.png).
 
 ### Landing page
 
