@@ -1,58 +1,107 @@
 # Webhook Playground
 
-Temporary webhook URLs to capture, inspect, and debug HTTP requests in real time.
+**Disposable webhook URLs for debugging integrations.** Create a temporary URL, send traffic from any client, and watch requests arrive in real time with headers and body, no signup required.
+
+<p align="left">
+  <a href="https://render.com/deploy?repo=https://github.com/ojusave/webhook-playground">
+    <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" height="40" />
+  </a>
+</p>
+
+| | |
+|:---|:---|
+| **Stack** | Next.js 14 · TypeScript · PostgreSQL · [Render](https://render.com) |
+| **License** | MIT |
+
+---
+
+## What you get
+
+- **Instant endpoints** with a TTL you choose (1, 6, or 24 hours).
+- **Live feed** of incoming HTTP requests over SSE as they hit your URL.
+- **Inspect everything** that matters: method, headers, body, content type, and timing.
+- **No accounts** and no tracking. Data expires and is deleted on schedule.
+
+---
 
 ## Screenshots
 
-Source files: [`components/img/landing.png`](./components/img/landing.png), [`components/img/dashboard.png`](./components/img/dashboard.png).
+### Landing
 
-### Landing page
+Pick TTL, create your URL, and optionally self-host with the Deploy button.
 
-Pick endpoint lifetime, then **Create endpoint** to get a temporary webhook URL.
-
-![Landing page: title, TTL selector, Create endpoint, privacy note, Deploy to Render](./components/img/landing.png)
+![Landing page: title, TTL, Create endpoint, privacy copy, Deploy to Render](./components/img/landing.png)
 
 ### Hook dashboard
 
-Copy the public hook URL, use **Send test request**, and expand a row to inspect headers and JSON body.
+Copy the hook URL, send a test request, and expand a row for headers and JSON.
 
-![Dashboard: webhook URL, expiry timer, request count, POST request with JSON body](./components/img/dashboard.png)
+![Dashboard: URL bar, timers, POST row, body](./components/img/dashboard.png)
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ojusave/webhook-playground)
+---
 
-One click: provisions **web service**, **Render Postgres**, and **cron** from [`render.yaml`](./render.yaml). Forks: change the `repo=` URL or set `NEXT_PUBLIC_BLUEPRINT_REPO_URL` when building so the landing-page button matches your GitHub repo.
+## Deploy with one click
 
-## Deploy (manual)
+The [Blueprint](https://render.com/docs/blueprint-spec) in [`render.yaml`](./render.yaml) provisions:
 
-Infrastructure is in **`render.yaml`**:
+| Piece | Role |
+|:------|:-----|
+| **Web service** | Runs the Next.js app (`plan: standard` in the sample file). |
+| **Render Postgres** | Stores endpoints and request payloads (`DATABASE_URL` injected). |
+| **Cron** | Hourly cleanup of expired data (`plan: standard`). |
 
-- **Web service:** `plan: standard`
-- **Cron:** `plan: standard`, hourly cleanup
-- **Render Postgres:** `plan: basic-256mb`; **`DATABASE_URL`** is injected into the web service and cron
-- **Migrations:** `preDeployCommand: node scripts/migrate.js` (runs when `DATABASE_URL` is available)
+**Forks:** point the deploy button at your repo by changing the `repo=` query on the button URL, or set `NEXT_PUBLIC_BLUEPRINT_REPO_URL` at build time so the in-app deploy link matches your GitHub remote.
 
-Or: [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → connect this repo → **Deploy**.
+---
 
-The platform sets **`RENDER_EXTERNAL_URL`** and related vars automatically ([default environment variables](https://render.com/docs/environment-variables)); the app uses that for full webhook URLs. Optional: **`NEXT_PUBLIC_APP_URL`** in the dashboard if you use a **custom domain** and want that host in links.
+## Deploy from the dashboard
 
-### Troubleshooting
+1. Push this repo to GitHub, GitLab, or Bitbucket.
+2. In the [Render Dashboard](https://dashboard.render.com): **New** → **Blueprint** → select the repo → deploy.
 
-- **TLS:** Postgres connections use TLS with settings appropriate for Render Postgres (`lib/pgSsl.js`).
-- **Missing tables:** Open the deploy log and confirm **preDeploy** printed `Migrations applied.`
-- **Wrong URL in UI:** Ensure you’re on the live service URL; set `NEXT_PUBLIC_APP_URL` if you use a custom domain.
+`preDeployCommand` runs [`scripts/migrate.js`](./scripts/migrate.js) when `DATABASE_URL` is present so tables exist before traffic hits the new release.
+
+---
+
+## Environment variables
+
+| Variable | Required | Purpose |
+|:---------|:---------|:--------|
+| `DATABASE_URL` | Yes (on Render) | Injected from the linked Postgres service. |
+| `RENDER_EXTERNAL_URL` | Auto on Render | Public base URL for full webhook links in the UI ([docs](https://render.com/docs/environment-variables)). |
+| `NEXT_PUBLIC_APP_URL` | No | Override the public origin if you use a **custom domain** and want that host in copied links. |
+
+---
+
+## Troubleshooting
+
+| Symptom | What to check |
+|:--------|:----------------|
+| Database errors | TLS is configured for Render Postgres in [`lib/pgSsl.js`](./lib/pgSsl.js). |
+| Missing tables | Deploy logs should show `Migrations applied.` from **preDeploy**. |
+| Wrong URL in the UI | Use the live service URL, or set `NEXT_PUBLIC_APP_URL` for a custom domain. |
+
+---
 
 ## Tech stack
 
-- **Next.js 14** (App Router) + **TypeScript**
-- **Tailwind CSS**
-- **PostgreSQL** via **`pg`** (raw SQL)
-- **SSE** for live updates
-- **`nanoid`** for endpoint IDs
+| Layer | Choice |
+|:------|:-------|
+| Framework | Next.js 14 (App Router), TypeScript |
+| UI | Tailwind CSS v4, [Render DDS](https://github.com/R4ph-t/DDS) components |
+| Data | PostgreSQL via `pg`, raw SQL |
+| Realtime | Server-Sent Events (SSE) for the request feed |
+| IDs | `nanoid` for endpoint identifiers |
+
+---
 
 ## Data handling
 
-- TTL: 1 / 6 / 24 hours; max **100** requests per endpoint; hourly cron deletes expired rows.
-- **No accounts**, **no cookies**, **no tracking**; URL secrecy only.
+- Each endpoint accepts up to **100** stored requests; TTL options are **1 / 6 / 24** hours.
+- Expired rows are removed by the cron job.
+- **No accounts, no cookies, no tracking.** Protection is URL secrecy only.
+
+---
 
 ## License
 
