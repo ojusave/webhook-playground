@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Roboto } from "next/font/google";
-import { THEME_STORAGE_KEY } from "@/lib/theme-storage";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,9 +21,9 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-/** Inline FOUC script: same logic as `ThemeScript` from render-dds (package is client-only). */
-function themeBootstrapScript(storageKey: string): string {
-  return `!function(){try{var e=localStorage.getItem(${JSON.stringify(storageKey)}),t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light",a=e||t;"dark"===a?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}catch(e){}}();`;
+/** Always enable dark theme (DDS `.dark` tokens). Do not read OS or localStorage, or light mode wins and strips `dark`. */
+function darkThemeScript(): string {
+  return `!function(){try{document.documentElement.classList.add("dark")}catch(e){}}();`;
 }
 
 export const metadata: Metadata = {
@@ -46,7 +45,7 @@ export default function RootLayout({
     >
       <head>
         <script
-          dangerouslySetInnerHTML={{ __html: themeBootstrapScript(THEME_STORAGE_KEY) }}
+          dangerouslySetInnerHTML={{ __html: darkThemeScript() }}
         />
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">

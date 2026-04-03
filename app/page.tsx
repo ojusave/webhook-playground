@@ -66,30 +66,6 @@ export default function HomePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex flex-col items-center gap-2">
-              <a
-                href={getBlueprintDeployUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <img
-                  src="https://render.com/images/deploy-to-render-button.svg"
-                  alt="Deploy to Render"
-                  width={175}
-                  height={40}
-                  className="h-10 w-auto"
-                />
-              </a>
-              <p className="max-w-[280px] text-center text-[11px] leading-snug text-muted-foreground">
-                Opens Blueprint setup for{" "}
-                <code className="rounded-none bg-muted px-1 font-mono text-[10px]">
-                  render.yaml
-                </code>{" "}
-                (web, Postgres, cron).
-              </p>
-            </div>
-
             <Alert variant="info">
               Your data is temporary. Endpoints auto-expire based on your chosen
               TTL. All payloads are automatically deleted. No accounts, no
@@ -119,6 +95,35 @@ export default function HomePage() {
             >
               {busy ? "Creating…" : "Create endpoint"}
             </Button>
+
+            <div className="border-t border-border pt-6">
+              <p className="mb-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Deploy your own
+              </p>
+              <div className="flex flex-col items-center gap-2">
+                <a
+                  href={getBlueprintDeployUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <img
+                    src="https://render.com/images/deploy-to-render-button.svg"
+                    alt="Deploy to Render"
+                    width={175}
+                    height={40}
+                    className="h-10 w-auto"
+                  />
+                </a>
+                <p className="max-w-[280px] text-center text-[11px] leading-snug text-muted-foreground">
+                  Opens Blueprint setup for{" "}
+                  <code className="rounded-none bg-muted px-1 font-mono text-[10px]">
+                    render.yaml
+                  </code>{" "}
+                  (web, Postgres, cron).
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </main>
