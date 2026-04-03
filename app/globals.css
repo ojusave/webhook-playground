@@ -2,24 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-/* DDS-inspired tokens (Render design system aesthetic) */
+/* Align with Render Dashboard–style surfaces (dark canvas, green primary) */
 :root {
-  --bg-base: #0c0e12;
-  --surface: #13161c;
-  --surface-raised: #1a1e27;
-  --surface-overlay: #222831;
-  --border: #2a3039;
-  --border-strong: #3d4450;
-  --content: #e8eaed;
-  --content-secondary: #9aa3b2;
-  --content-tertiary: #6b7280;
-  --accent: #5c6bc0;
-  --accent-hover: #6d7dd2;
-  --accent-muted: rgba(92, 107, 192, 0.15);
+  --bg-canvas: #0d1117;
+  --surface-default: #161b22;
+  --surface-elevated: #21262d;
+  --border-default: #30363d;
+  --border-muted: #21262d;
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-tertiary: #6e7681;
+  --render-primary: #00d639;
+  --render-primary-hover: #00f451;
+  --render-primary-muted: rgba(0, 214, 57, 0.12);
+  --focus-ring: rgba(0, 214, 57, 0.45);
+  /* Legacy aliases used in tailwind theme */
+  --bg-base: var(--bg-canvas);
+  --surface: var(--surface-default);
+  --surface-raised: var(--surface-elevated);
+  --surface-overlay: #2d333b;
+  --border: var(--border-default);
+  --border-strong: #484f58;
+  --content: var(--text-primary);
+  --content-secondary: var(--text-secondary);
+  --content-tertiary: var(--text-tertiary);
+  --accent: var(--render-primary);
+  --accent-hover: var(--render-primary-hover);
+  --accent-muted: var(--render-primary-muted);
 }
 
 @layer base {
   body {
-    @apply bg-[var(--bg-base)] text-content antialiased;
+    @apply bg-[var(--bg-canvas)] text-[var(--text-primary)] antialiased;
+  }
+}
+
+@layer components {
+  .render-panel {
+    @apply rounded-md border border-[var(--border-default)] bg-[var(--surface-default)];
+  }
+  .render-btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-[var(--render-primary)] px-4 py-2 text-sm font-semibold text-[#0d1117] transition hover:bg-[var(--render-primary-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .render-btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-[var(--border-default)] bg-[var(--surface-elevated)] px-3 py-1.5 text-sm font-medium text-[var(--text-primary)] transition hover:bg-[#30363d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)];
+  }
+  .render-pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-[var(--border-default)] bg-[var(--surface-default)] px-3 py-1 text-xs font-medium text-[var(--text-secondary)];
+  }
+  .render-label {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)];
   }
 }

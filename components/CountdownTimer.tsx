@@ -45,8 +45,9 @@ export function CountdownTimer({
   }, [expiresAtIso]);
 
   return (
-    <span className="font-mono text-sm tabular-nums text-content-secondary">
-      Expires in {label}
+    <span className="render-pill font-mono tabular-nums text-[var(--text-secondary)]">
+      <span className="text-[var(--text-tertiary)]">Expires in</span>
+      <span className="text-[var(--text-primary)]">{label}</span>
     </span>
   );
 }

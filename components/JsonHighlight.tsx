@@ -12,16 +12,16 @@ function highlightTail(s: string) {
   while ((m = re.exec(s)) !== null) {
     if (m.index > last) {
       nodes.push(
-        <span key={`p-${k++}`} className="text-content">
+        <span key={`p-${k++}`} className="text-[var(--text-primary)]">
           {s.slice(last, m.index)}
         </span>
       );
     }
     const tok = m[0];
-    let cls = "text-content";
+    let cls = "text-[var(--text-primary)]";
     if (tok.startsWith('"')) cls = "text-emerald-400/90";
     else if (tok === "true" || tok === "false") cls = "text-violet-400/90";
-    else if (tok === "null") cls = "text-content-tertiary";
+    else if (tok === "null") cls = "text-[var(--text-tertiary)]";
     else cls = "text-amber-400/90";
     nodes.push(
       <span key={`p-${k++}`} className={cls}>
@@ -32,7 +32,7 @@ function highlightTail(s: string) {
   }
   if (last < s.length) {
     nodes.push(
-      <span key={`p-${k++}`} className="text-content">
+      <span key={`p-${k++}`} className="text-[var(--text-primary)]">
         {s.slice(last)}
       </span>
     );
@@ -57,15 +57,15 @@ export function JsonHighlight({ json }: { json: string }) {
           const [, indent, key, colon, tail] = km;
           return (
             <span key={li} className="block">
-              <span className="text-content-tertiary">{indent}</span>
-              <span className="text-accent">{key}</span>
-              <span className="text-content-secondary">{colon}</span>
+              <span className="text-[var(--text-tertiary)]">{indent}</span>
+              <span className="text-[#79c0ff]">{key}</span>
+              <span className="text-[var(--text-secondary)]">{colon}</span>
               {highlightTail(tail)}
             </span>
           );
         }
         return (
-          <span key={li} className="block text-content">
+          <span key={li} className="block text-[var(--text-primary)]">
             {highlightTail(line)}
           </span>
         );

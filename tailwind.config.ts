@@ -33,7 +33,8 @@ const config: Config = {
         mono: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
       },
       boxShadow: {
-        focus: "0 0 0 2px var(--bg-base), 0 0 0 4px var(--accent)",
+        focus:
+          "0 0 0 2px var(--bg-canvas), 0 0 0 4px var(--focus-ring)",
       },
       keyframes: {
         "slide-in": {

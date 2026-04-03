@@ -9,6 +9,25 @@ import { EmptyState } from "./EmptyState";
 import { ExpiredState } from "./ExpiredState";
 import { RequestCard } from "./RequestCard";
 
+function BackIcon() {
+  return (
+    <svg
+      className="h-4 w-4"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M15 19l-7-7 7-7"
+      />
+    </svg>
+  );
+}
+
 export function Dashboard({
   endpointId,
   webhookUrl,
@@ -87,38 +106,52 @@ export function Dashboard({
     <div className="relative min-h-screen">
       {expired ? <ExpiredState /> : null}
 
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex min-w-0 items-center gap-3">
-            <Link
-              href="/"
-              className="shrink-0 rounded-md p-1 text-content-secondary hover:bg-surface-overlay hover:text-content focus:outline-none focus-visible:shadow-focus"
-              aria-label="Back to home"
-            >
-              ←
-            </Link>
-            <div className="min-w-0">
-              <p className="text-xs font-medium uppercase tracking-wide text-content-tertiary">
-                Webhook URL
-              </p>
-              <p className="truncate font-mono text-sm text-accent sm:text-base">
-                {webhookUrl}
-              </p>
+      <header className="border-b border-[var(--border-default)] bg-[var(--surface-default)]">
+        <div className="mx-auto max-w-5xl px-4 py-5">
+          <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex min-w-0 items-start gap-3">
+              <Link
+                href="/"
+                className="render-btn-secondary mt-0.5 !p-2"
+                aria-label="Back to home"
+              >
+                <BackIcon />
+              </Link>
+              <div className="min-w-0">
+                <p className="render-label">Webhook URL</p>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  Incoming requests appear in the feed below.
+                </p>
+              </div>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
+
+          <div className="render-panel flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <p className="min-w-0 flex-1 break-all font-mono text-sm leading-relaxed text-[#79c0ff]">
+              {webhookUrl}
+            </p>
             <CopyButton text={webhookUrl} />
-            <CountdownTimer expiresAtIso={expiresAtIso} onExpire={onExpire} />
-            <span className="font-mono text-sm text-content-secondary">
-              {count} / 100 requests
-            </span>
+          </div>
+
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-2">
+              <CountdownTimer expiresAtIso={expiresAtIso} onExpire={onExpire} />
+              <span className="render-pill font-mono tabular-nums text-[var(--text-secondary)]">
+                <span className="text-[var(--text-tertiary)]">Requests</span>
+                <span className="text-[var(--text-primary)]">
+                  {count}
+                  <span className="text-[var(--text-tertiary)]"> / </span>
+                  100
+                </span>
+              </span>
+            </div>
             <button
               type="button"
               onClick={sendTest}
               disabled={expired || testBusy}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover focus:outline-none focus-visible:shadow-focus disabled:opacity-50"
+              className="render-btn-primary w-full sm:w-auto"
             >
-              {testBusy ? "Sending…" : "Send Test Request"}
+              {testBusy ? "Sending…" : "Send test request"}
             </button>
           </div>
         </div>

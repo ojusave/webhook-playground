@@ -33,49 +33,50 @@ export function RequestCard({ req }: { req: StoredRequest }) {
   const headerEntries = Object.entries(req.headers ?? {});
 
   return (
-    <div className="animate-slide-in rounded-xl border border-border bg-surface-raised shadow-sm">
+    <div className="animate-slide-in rounded-md border border-[var(--border-default)] bg-[var(--surface-default)] shadow-sm">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-start gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-surface-overlay focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex w-full items-start gap-3 rounded-md px-4 py-3 text-left transition hover:bg-[var(--surface-elevated)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)]"
       >
         <MethodBadge method={req.method} />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span
-              className="font-mono text-xs text-content-secondary"
+              className="font-mono text-xs text-[var(--text-secondary)]"
               title={req.received_at}
             >
               {relativeTime(req.received_at)}
             </span>
-            <span className="text-xs text-content-tertiary">
+            <span className="text-xs text-[var(--text-tertiary)]">
               {req.source_ip ?? "—"}
             </span>
-            <span className="truncate font-mono text-xs text-content-tertiary">
+            <span className="truncate font-mono text-xs text-[var(--text-tertiary)]">
               {req.content_type ?? "no content-type"}
             </span>
           </div>
         </div>
-        <span className="shrink-0 text-content-tertiary" aria-hidden>
+        <span className="shrink-0 text-[var(--text-tertiary)]" aria-hidden>
           {open ? "▾" : "▸"}
         </span>
       </button>
       {open && (
-        <div className="space-y-4 border-t border-border px-4 py-4">
+        <div className="space-y-4 border-t border-[var(--border-default)] px-4 py-4">
           {headerEntries.length > 0 && (
             <div>
-              <h4 className="mb-2 text-xs font-medium uppercase tracking-wide text-content-tertiary">
-                Headers
-              </h4>
-              <div className="overflow-x-auto rounded-lg border border-border">
+              <h4 className="mb-2 render-label">Headers</h4>
+              <div className="overflow-x-auto rounded-md border border-[var(--border-default)]">
                 <table className="w-full min-w-[280px] text-left font-mono text-xs">
                   <tbody>
                     {headerEntries.map(([k, v]) => (
-                      <tr key={k} className="border-b border-border last:border-0">
-                        <td className="whitespace-nowrap px-3 py-2 text-accent">
+                      <tr
+                        key={k}
+                        className="border-b border-[var(--border-default)] last:border-0"
+                      >
+                        <td className="whitespace-nowrap px-3 py-2 text-[#79c0ff]">
                           {k}
                         </td>
-                        <td className="break-all px-3 py-2 text-content-secondary">
+                        <td className="break-all px-3 py-2 text-[var(--text-secondary)]">
                           {v}
                         </td>
                       </tr>
@@ -87,24 +88,28 @@ export function RequestCard({ req }: { req: StoredRequest }) {
           )}
           <div>
             <div className="mb-2 flex items-center justify-between gap-2">
-              <h4 className="text-xs font-medium uppercase tracking-wide text-content-tertiary">
-                Body
-              </h4>
+              <h4 className="render-label">Body</h4>
               {req.body ? (
-                <CopyButton text={req.body} label="Copy body" className="!py-1 !text-xs" />
+                <CopyButton
+                  text={req.body}
+                  label="Copy body"
+                  className="!px-2 !py-1 !text-xs"
+                />
               ) : null}
             </div>
-            <div className="max-h-96 overflow-auto rounded-lg border border-border bg-[var(--bg-base)] p-3">
+            <div className="max-h-96 overflow-auto rounded-md border border-[var(--border-default)] bg-[var(--bg-canvas)] p-3">
               {req.body ? (
                 isJson ? (
                   <JsonHighlight json={req.body} />
                 ) : (
-                  <pre className="whitespace-pre-wrap break-words font-mono text-xs text-content">
+                  <pre className="whitespace-pre-wrap break-words font-mono text-xs text-[var(--text-primary)]">
                     {req.body}
                   </pre>
                 )
               ) : (
-                <p className="font-mono text-xs text-content-tertiary">(empty)</p>
+                <p className="font-mono text-xs text-[var(--text-tertiary)]">
+                  (empty)
+                </p>
               )}
             </div>
           </div>

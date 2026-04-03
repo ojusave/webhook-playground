@@ -15,7 +15,7 @@ export function TTLSelector({
 }) {
   return (
     <div
-      className="inline-flex rounded-lg border border-border bg-surface p-1"
+      className="inline-flex rounded-md border border-[var(--border-default)] bg-[var(--surface-default)] p-0.5"
       role="group"
       aria-label="Endpoint lifetime"
     >
@@ -26,10 +26,10 @@ export function TTLSelector({
             key={opt.hours}
             type="button"
             onClick={() => onChange(opt.hours)}
-            className={`rounded-md px-4 py-2 text-sm font-medium transition focus:outline-none focus-visible:shadow-focus ${
+            className={`rounded-[4px] px-4 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] ${
               active
-                ? "bg-accent text-white shadow-sm"
-                : "text-content-secondary hover:bg-surface-overlay hover:text-content"
+                ? "bg-[var(--render-primary)] font-semibold text-[#0d1117] shadow-sm"
+                : "text-[var(--text-secondary)] hover:bg-[var(--surface-elevated)] hover:text-[var(--text-primary)]"
             }`}
           >
             {opt.label}

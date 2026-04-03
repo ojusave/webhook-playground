@@ -38,7 +38,7 @@ export default function HomePage() {
       }
       router.push(`/hooks/${data.id}`);
     } catch {
-      setError("Could not reach the server. Check your connection and try again.");
+      setError("Could not reach the server. Try again in a moment.");
     } finally {
       setBusy(false);
     }
@@ -47,34 +47,35 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex flex-1 flex-col items-center justify-center px-4 py-16">
-        <div className="w-full max-w-lg rounded-2xl border border-border bg-surface-raised p-8 shadow-xl">
-          <h1 className="text-center text-3xl font-semibold tracking-tight text-content">
+        <div className="render-panel w-full max-w-lg p-8 shadow-xl">
+          <h1 className="text-center text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
             Webhook Playground
           </h1>
-          <p className="mt-3 text-center text-sm leading-relaxed text-content-secondary">
+          <p className="mt-2 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
             Capture, inspect, and debug HTTP requests in real time.
           </p>
 
           <div
-            className="mt-8 rounded-lg border border-border bg-surface p-4 text-sm leading-relaxed text-content-secondary"
+            className="mt-8 rounded-md border border-[var(--border-default)] bg-[var(--bg-canvas)] p-4 text-sm leading-relaxed text-[var(--text-secondary)]"
             role="status"
           >
             Your data is temporary. Endpoints auto-expire based on your chosen
-            TTL. All payloads are automatically deleted. No accounts, no cookies,
-            no tracking.
+            TTL. All payloads are automatically deleted. No accounts, no
+            cookies, no tracking.
           </div>
 
           <div className="mt-8">
-            <p className="mb-3 text-center text-xs font-medium uppercase tracking-wide text-content-tertiary">
-              Endpoint lifetime
-            </p>
+            <p className="mb-3 text-center render-label">Endpoint lifetime</p>
             <div className="flex justify-center">
               <TTLSelector value={ttl} onChange={setTtl} />
             </div>
           </div>
 
           {error ? (
-            <p className="mt-4 text-center text-sm text-red-400" role="alert">
+            <p
+              className="mt-4 text-center text-sm text-red-400/95"
+              role="alert"
+            >
               {error}
             </p>
           ) : null}
@@ -83,25 +84,24 @@ export default function HomePage() {
             type="button"
             onClick={createEndpoint}
             disabled={busy}
-            className="mt-8 w-full rounded-lg bg-accent py-3 text-sm font-semibold text-white transition hover:bg-accent-hover focus:outline-none focus-visible:shadow-focus disabled:opacity-60"
+            className="render-btn-primary mt-8 w-full"
           >
-            {busy ? "Creating…" : "Create Endpoint"}
+            {busy ? "Creating…" : "Create endpoint"}
           </button>
         </div>
       </main>
 
-      <footer className="border-t border-border py-6 text-center text-xs text-content-tertiary">
+      <footer className="border-t border-[var(--border-default)] py-6 text-center text-xs text-[var(--text-tertiary)]">
         <p>
-          Built with Next.js. Deployed on{" "}
+          Built with Next.js ·{" "}
           <Link
             href="https://render.com"
-            className="text-accent hover:underline"
+            className="text-[#79c0ff] hover:underline"
             target="_blank"
             rel="noreferrer"
           >
             Render
           </Link>
-          .
         </p>
       </footer>
     </div>
