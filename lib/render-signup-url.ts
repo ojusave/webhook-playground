@@ -1,9 +1,9 @@
 export function renderSignupUrlWithUtms(): string {
   const params = new URLSearchParams({
-    utm_source: "webhook_playground",
+    utm_source: "github",
     utm_medium: "referral",
-    utm_campaign: "webhook_playground_app",
+    utm_campaign: "ojus_demos",
     utm_content: "footer_link",
   });
-  return `https://render.com/register?${params.toString()}`;
+  return `https://dashboard.render.com/register?${params.toString()}`;
 }
